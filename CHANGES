@@ -1,3 +1,29 @@
+ 22-Sep-2013           Marek Rouchal                        <marekr@cpan.org>
+ -----------------------------------------------------------------------------
+ Version 1.70
+ + applied all 19 patches from CPAN#85442: PATCH: ditch Pod::Parser for 
+   Pod::Simple - many thanks to all contributers!
+    0001-import-Marc-Green-s-port-to-Pod-Simple.patch
+    0002-replace-illegal-empty-L-with-C-LE-lt-E-gt.patch
+    0003-start-expecting-the-new-item-changed-type-warning.patch
+    0004-we-get-back-warning-if-we-turn-them-on.patch
+    0005-avoid-hash-ordering-bug-in-tests.patch
+    0006-eliminate-the-utterly-broken-unescaped-warning.patch
+    0007-remove-weird-added-later-remark-about-unescaped.patch
+    0008-remove-mention-of-unescaped.patch
+    0009-item-type-mismatch-was-moved-to-Pod-Simple.patch
+    0010-use-the-same-warning-error-level-as-in-Pod-Simple.patch
+    0011-rely-on-over-w-o-closing-back-being-in-Pod-Simple.patch
+    0012-eliminate-the-list-stack-thus-eliminating-use-of-Pod.patch
+    0013-expect-new-L-warnings-from-Pod-Simple.patch
+    0014-stop-passing-on-Pod-Hyperlink-warnings-as-warnings.patch
+    0015-reimplement-unresolved-internal-hyperlink-check.patch
+    0016-make-it-easy-to-get-diffs-on-what-broke-expectations.patch
+    0017-avoid-using-experimental-feature.patch
+    0018-tweak-docs-a-bit.patch
+    0019-update-prereq-for-Pod-Simple.patch
+ + created new release with updated $VERSIONs
+
  27-Jan-2013           Marek Rouchal                        <marekr@cpan.org>
  -----------------------------------------------------------------------------
  Version 1.60

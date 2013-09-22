@@ -17,3 +17,4 @@ t/pod/contains_bad_pod.xr -- expected results
 t/pod/podchkenc.t     -- validate =encoding support
 t/pod/podchkenc.xr    -- expected results for the above
 t/pod/empty.xr        -- expected results (the empty file)
+META.json                                Module JSON meta-data (added by MakeMaker)
