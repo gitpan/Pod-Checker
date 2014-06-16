@@ -11,12 +11,11 @@ use strict;
 use warnings;
 use Data::Dumper
 
-our $VERSION = '1.70';  ## Current version of this package
-use 5.14.0;
+our $VERSION = '1.71';  ## Current version of this package
 
 =head1 NAME
 
-Pod::Checker, podchecker() - check pod documents for syntax errors
+Pod::Checker - check pod documents for syntax errors
 
 =head1 SYNOPSIS
 
@@ -339,6 +338,14 @@ there were no POD commands at all found in the file.
 =head1 EXAMPLES
 
 See L</SYNOPSIS>
+
+=head1 SCRIPTS
+
+The B<podchecker> script that comes with this distribution is a lean wrapper
+around this module. See the online manual with
+
+  podchecker -help
+  podchecker -man
 
 =head1 INTERFACE
 
@@ -754,7 +761,9 @@ sub end_head3 { shift->end_head(@_) }
 sub end_head4 { shift->end_head(@_) }
 sub end_head  {
     my $self = shift;
-    my $arg = $self->{'_head_text'} = $self->{'_thispara'} =~ s/\s+$//r;
+    my $arg = $self->{'_thispara'};
+    $arg =~ s/\s+$//;
+    $self->{'_head_text'} = $arg;
     $self->{'_cmds_since_head'} = 0;
     my $h = $self->{'_head_num'};
     $self->node($arg); # remember this node
@@ -803,12 +812,12 @@ sub end_item {
 sub start_for { # =for and =begin directives
     my ($self, $flags) = @_;
     $self->_init_event($flags);
-    push $self->{'_begin_stack'}, [$self->{'_line'}, $flags->{'target'}];
+    push @{$self->{'_begin_stack'}}, [$self->{'_line'}, $flags->{'target'}];
 }
 
 sub end_for {
     my ($self, $flags) = @_;
-    my ($line, $target) = @{pop $self->{'_begin_stack'}};
+    my ($line, $target) = @{pop @{$self->{'_begin_stack'}}};
     if ($flags->{'fake-closer'}) { # meaning Pod::Simple generated this =end
         $self->poderror({ -line => $line,
                           -severity => 'ERROR',
@@ -877,7 +886,7 @@ sub start_I { shift->start_fcode('I') }
 sub start_S { shift->start_fcode('S') }
 sub start_fcode {
     my ($self, $fcode) = @_;
-    unshift $self->{'_fcode_stack'}, $fcode;
+    unshift @{$self->{'_fcode_stack'}}, $fcode;
 }
 
 sub end_B { shift->end_fcode() }
@@ -887,7 +896,7 @@ sub end_I { shift->end_fcode() }
 sub end_S { shift->end_fcode() }
 sub end_fcode {
     my $self = shift;
-    $self->_check_fcode(shift $self->{'_fcode_stack'}, # current fcode removed
+    $self->_check_fcode(shift @{$self->{'_fcode_stack'}}, # current fcode removed
                         $self->{'_fcode_stack'}); # previous fcodes
 }
 
@@ -939,12 +948,12 @@ sub start_X {
     $self->start_fcode('X');
     # keep track of where X<> starts in the paragraph
     # (this is a stack so nested X<>s are handled correctly)
-    push $self->{'_fcode_pos'}, length $self->{'_thispara'};
+    push @{$self->{'_fcode_pos'}}, length $self->{'_thispara'};
 }
 sub end_X {
     my $self = shift;
     # extract contents of X<> and replace with ''
-    my $start = pop $self->{'_fcode_pos'}; # start at the beginning of X<>
+    my $start = pop @{$self->{'_fcode_pos'}}; # start at the beginning of X<>
     my $end = length($self->{'_thispara'}) - $start; # end at end of X<>
     my $x = substr($self->{'_thispara'}, $start, $end, '');
     unless ($x) {

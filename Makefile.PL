@@ -4,6 +4,7 @@
 # you can redistribute it and/or modify it under the same terms
 # as Perl itself.
 
+use 5.008;
 use ExtUtils::MakeMaker;
 use File::Spec;
 
@@ -52,7 +53,7 @@ if ($] < 5.005) {
 WriteMakefile(
     NAME         => $DISTMOD,
     DISTNAME     => $DISTNAME,
-    VERSION      => '1.70',
+    VERSION      => '1.71',
     INSTALLDIRS  => ($] >= 5.006 ? 'perl' : 'site'),
     PL_FILES     => { map { (script("$_.PL") => script($_)) } @SCRIPTS },
     EXE_FILES    => [ @EXE_FILES ],
